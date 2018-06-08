@@ -16,11 +16,6 @@ public class Screenshotter : MonoBehaviour
                              System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
     }
 
-    public void Takehot()
-    {
-        takeShot = true;
-    }
-
     
 
 
