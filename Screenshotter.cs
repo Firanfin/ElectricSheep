@@ -6,7 +6,7 @@ public class Screenshotter : MonoBehaviour
     public int resWidth = 1280;
     public int resHeight = 720;
 
-    private bool takeHiResShot = false;
+    private bool takeShot = false;
 
     public static string ScreenShotName(int width, int height)
     {
@@ -16,9 +16,9 @@ public class Screenshotter : MonoBehaviour
                              System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
     }
 
-    public void TakeHiResShot()
+    public void Takehot()
     {
-        takeHiResShot = true;
+        takeShot = true;
     }
 
     
@@ -26,8 +26,8 @@ public class Screenshotter : MonoBehaviour
 
     void LateUpdate()
     {
-        takeHiResShot |= Input.GetKeyDown("k");
-        if (takeHiResShot)
+        takeShot |= Input.GetKeyDown("k");
+        if (takeShot)
         {
             Camera thisCamera = GetComponent<Camera>();
             RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
@@ -43,7 +43,7 @@ public class Screenshotter : MonoBehaviour
             string filename = ScreenShotName(resWidth, resHeight);
             System.IO.File.WriteAllBytes(filename, bytes);
             Debug.Log(string.Format("Took screenshot to: {0}", filename));
-            takeHiResShot = false;
+            takeShot = false;
         }
     }
 }
