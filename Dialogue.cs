@@ -10,21 +10,34 @@ using UnityEngine.SceneManagement;
 public class Dialogue
 {
     // Properties
-    public string nextFile;
     public DialogueLine[] content;
-    public bool used;
+    public bool used = false;
+    public DialogueOption[] options;
 
-    // Constructor
-    public Dialogue(string dialogueFileName)
+
+    // Different types of constructors to use with json conversion
+    public Dialogue() { }
+
+    public Dialogue(string dialogueFileName) : this()
     {
-        string filePath = "C:/Users/Rami-Roope/Documents/Opiskelu/Pelinkehittäjä/Electric Sheep/Electric Sheep WIP/Assets/Dialogue/"
-            + SceneManager.GetActiveScene().name + "/" + dialogueFileName;
+        string filePath = "Assets/Dialogue/" + SceneManager.GetActiveScene().name + "/" + dialogueFileName;
         string jString = new StreamReader(filePath).ReadToEnd();
         Dialogue dialogue = JsonConvert.DeserializeObject<Dialogue>(jString);
-
-        nextFile = dialogue.nextFile;
+        
         content = dialogue.content;
         used = dialogue.used;
+        options = dialogue.options;
+    }
+
+    public Dialogue(TextAsset file)
+    {
+
+        string jString = file.text;
+        Dialogue dialogue = JsonConvert.DeserializeObject<Dialogue>(jString);
+        
+        content = dialogue.content;
+        used = dialogue.used;
+        options = dialogue.options;
     }
 
 
@@ -59,7 +72,7 @@ public class Dialogue
     //{
     //    this.used = true;
     //}
-    
+
 
 }
 

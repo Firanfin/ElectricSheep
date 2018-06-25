@@ -11,7 +11,7 @@ using UnityEngine;
 public class DialogueLine
 {
     // Properties
-    public string type;
-    public string name;
+    public string type = "";
+    public string name = "";
     public string[] sentences;
 }

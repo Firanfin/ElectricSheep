@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,11 +8,14 @@ public class DialogueManager : MonoBehaviour {
 
 	public Text nameText;
 	public Text dialogueText;
+    public GameObject[] buttons;
 
 	public Animator animator;
 
 	private Queue<DialogueLine> allLines;
     private Queue<string> sentences;
+
+    private DialogueOption[] options;
 
 	// Use this for initialization
 	void Start () {
@@ -28,11 +32,17 @@ public class DialogueManager : MonoBehaviour {
     {
         animator.SetBool("DialogueOpen", true);
 
-		allLines.Clear();
+        foreach (GameObject button in buttons)
+        {
+            button.GetComponentInChildren<Text>().text = "";
+        }
+
+        allLines.Clear();
         foreach (DialogueLine dialogueLine in dialogue.content)
         {
             allLines.Enqueue(dialogueLine);
         }
+        options = dialogue.options;
 
         NextSpeaker();
 	}
@@ -44,7 +54,7 @@ public class DialogueManager : MonoBehaviour {
     {
         if (allLines.Count == 0)
         {
-            EndDialogue();
+            GerenateOptions(options);
             return;
         }
 
@@ -57,6 +67,23 @@ public class DialogueManager : MonoBehaviour {
         }
         DisplayNextSentence();
 
+    }
+
+    /* Here we assign the contents of the "options" array to buttons so that the player can use them.
+     * */
+    public void GerenateOptions(DialogueOption[] options)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (options[i] == null)
+            {
+                return;
+            }
+            buttons[i].SetActive(true);
+            buttons[i].GetComponentInChildren<Text>().text = options[i].text;
+            buttons[i].GetComponent<DialogueTrigger>().textAsset = 
+                (TextAsset)AssetDatabase.LoadAssetAtPath("Assets/Dialogue/InterrogationScene1/" + options[i].destinationFile, typeof(TextAsset));
+        }
     }
 
     /* Displays the next line in the queue and removes it at the same time.
@@ -85,8 +112,8 @@ public class DialogueManager : MonoBehaviour {
 		foreach (char letter in sentence.ToCharArray())
 		{
 			dialogueText.text += letter;
-			yield return null;
-		}
+            yield return new WaitForSeconds(GameConstants.textSpeed);
+        }
 	}
 
 
