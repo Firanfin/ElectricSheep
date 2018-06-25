@@ -6,18 +6,31 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/* An instance of this class will hold the information of one dialogue data file.
+ * All lines to be displayed after a choice is made, wether this dialogue has already
+ * been used and the max 3 choices that will follow this particular dialogue.
+ * */
 [Serializable]
 public class Dialogue
 {
-    // Properties
+    // ---------- Properties -----------
+
+    // The text to be displayed in easy to display format
     public DialogueLine[] content;
+
+    // A boolean that indicates, wether this dialogue has already been used
     public bool used = false;
+
+    // The dialogue options that the player can chooce from after the content of this dialogue
     public DialogueOption[] options;
 
 
-    // Different types of constructors to use with json conversion
+    // ---------- Constructors ----------
+
+    // One without arguments, needed when converting from json files
     public Dialogue() { }
 
+    // One that takes a filename as an argument
     public Dialogue(string dialogueFileName) : this()
     {
         string filePath = "Assets/Dialogue/" + SceneManager.GetActiveScene().name + "/" + dialogueFileName;
@@ -29,6 +42,7 @@ public class Dialogue
         options = dialogue.options;
     }
 
+    // One that takes a preassosiated text asset as an argument
     public Dialogue(TextAsset file)
     {
 
@@ -39,40 +53,6 @@ public class Dialogue
         used = dialogue.used;
         options = dialogue.options;
     }
-
-
-
-    /* This method is designed to be a shorthand for sorting the contents of 
-     * a DialogueList into smaller pieces according to their conversation type.
-     * It is called in the Start() method. Its arguments are the list, that is
-     * being sorted and the type with which the sorting will be done.
-     * */
-    //public DialogueLine[] SortDialogue(DialogueLine[] argument, ConvType type)
-    //{
-    //    List<DialogueLine> dialogueListHelper = new List<DialogueLine>();
-    //    int counterHelper = 0;
-
-    //    foreach (DialogueLine oneLine in argument)
-    //    {
-    //        if (oneLine.type == type)
-    //        {
-    //            dialogueListHelper.Add(oneLine);
-    //            counterHelper++;
-    //        }
-    //    }
-
-    //    DialogueLine[] result = new DialogueLine[counterHelper];
-    //    for (int i = 0; i < counterHelper; i++)
-    //    {
-    //        result[i] = dialogueListHelper[i];
-    //    }
-    //    return result;
-    //}
-    //public void AskQuestion()
-    //{
-    //    this.used = true;
-    //}
-
 
 }
 

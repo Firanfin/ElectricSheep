@@ -10,8 +10,14 @@ using UnityEngine;
 [System.Serializable]
 public class DialogueLine
 {
-    // Properties
+    // ---------- Properties ----------
+
+    // The type of the line
     public string type = "";
+
+    // The name of the speaker
     public string name = "";
+
+    // This array consists of all the consecutive sentences of one speaker
     public string[] sentences;
 }

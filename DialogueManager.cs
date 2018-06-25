@@ -4,18 +4,35 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+/* This class is the one that takes care of most of the dialogue. It is designed to be
+ * put on some abstract game manager object.
+ * */
 public class DialogueManager : MonoBehaviour {
 
+    // ---------- Properties ----------
+
+    // A reference to the text box that displys the name of the speaker
 	public Text nameText;
+
+    // A reference to the text box that displays the content of the dialogue
 	public Text dialogueText;
+
+    // An array of references for the buttons that will display the options
     public GameObject[] buttons;
 
+    // A reference for the animator of the dialogue panel
 	public Animator animator;
 
+    // A queue that stores all dialogue lines of this dialogue, easy to manipulate further
 	private Queue<DialogueLine> allLines;
+
+    // A queue that is used to display the sentences of one dialogue line
     private Queue<string> sentences;
 
+    // An array that stores the options related to this dialogue
     private DialogueOption[] options;
+
+    // ---------- Methods ----------
 
 	// Use this for initialization
 	void Start () {
@@ -24,9 +41,12 @@ public class DialogueManager : MonoBehaviour {
 	}
     
 
-    /* A method, that is called when a person begins to speak. Takes one argument
-     * of type DialogueLine and doesn't return anythng. Uses the Queue<string>
-     * property of the class, to go through all lines.
+    /* A method, that is called when a dialogue starts. Takes one argument
+     * of type Dialogue and doesn't return anythng. It activates the animator
+     * to open the dialogue panel. It clears the buttons of any text and
+     * queues the lines of this Dialogue into the allLines queue. At the
+     * same time it stores the options of this dialogue to the appropriate
+     * property and calls for the NextSpeaker() method.
      * */
 	public void StartDialogue (Dialogue dialogue)
     {
@@ -38,17 +58,22 @@ public class DialogueManager : MonoBehaviour {
         }
 
         allLines.Clear();
+
         foreach (DialogueLine dialogueLine in dialogue.content)
         {
             allLines.Enqueue(dialogueLine);
         }
+
         options = dialogue.options;
 
         NextSpeaker();
+
 	}
 
     /* Starts the monologue of the next speaker in the allLines queue.
-     * If allLines queue is empty, the dialogue has ended.
+     * If allLines queue is empty, the dialogue has ended and it calls
+     * the GenerateOptions() method. If there are still lines in the queue,
+     * it names the speaker and makes a queue of the sentences to be displayed.
      * */
     public void NextSpeaker()
     {
@@ -69,7 +94,8 @@ public class DialogueManager : MonoBehaviour {
 
     }
 
-    /* Here we assign the contents of the "options" array to buttons so that the player can use them.
+    /* This method assigns the contents of the "options" array to buttons so that the player can use them.
+     * 
      * */
     public void GerenateOptions(DialogueOption[] options)
     {
@@ -87,8 +113,8 @@ public class DialogueManager : MonoBehaviour {
     }
 
     /* Displays the next line in the queue and removes it at the same time.
-     * If the queue is empty, all lines of the monologue have been shown.
-     * Call the next speaker.
+     * If the queue is empty, all lines of the monologue have been shown,
+     * and it calls the next speaker.
      * */
 	public void DisplayNextSentence()
 	{
@@ -103,8 +129,9 @@ public class DialogueManager : MonoBehaviour {
 		StartCoroutine(TypeSentence(sentence));
 	}
 
-    /* A coroutine, that simlpy makes the characters of one line
-     * to appear one by one on the screen.
+    /* A coroutine, that simlpy makes the characters of a line
+     * of text to appear one by one on the screen. It uses a custom
+     * GameConstant class to define the delay between characters
      * */
 	IEnumerator TypeSentence (string sentence)
 	{
@@ -118,7 +145,7 @@ public class DialogueManager : MonoBehaviour {
 
 
     /* A method run at the end of the Dialogue. It just tells the animator to
-     * close the dialogue box.
+     * close the dialogue panel
      * */
 	void EndDialogue()
 	{

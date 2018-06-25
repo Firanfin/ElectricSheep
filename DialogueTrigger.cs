@@ -2,25 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script is designed to be put on the button, that advances the dialogue
 public class DialogueTrigger : MonoBehaviour {
 
-    //public string dialogueFileName;
-    public TextAsset textAsset;
-    public DialogueManager manager;
-    
-    // Check, what we should do next
-    public void ReactToDialogueRequest()
-    {
+    // ---------- Properties ----------
 
-    }
-    // If end of file, ask the gamemaster, what to do
-    // If file continues, start next dialogue
+    //public string dialogueFileName;
+
+    public TextAsset textAsset;
+
+    public DialogueManager manager;
 
 
     //public void TriggerDialogue()
     //{
     //	manager.StartDialogue(new Dialogue(dialogueFileName));
     //}
+
+    // ---------- Methods ----------
 
     public void TriggerDialogue()
     {
